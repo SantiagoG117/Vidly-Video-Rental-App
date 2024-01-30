@@ -3,6 +3,9 @@ using System.Web.Optimization;
 
 namespace Vidly_Video_Rental_App
 {
+    /// <summary>
+    /// Pre-define different bundles of client-side assets
+    /// </summary>
     public class BundleConfig
     {
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
@@ -22,8 +25,9 @@ namespace Vidly_Video_Rental_App
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
 
+            // Generic styles of the application
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/bootstrap-lumen.css",
                       "~/Content/site.css"));
         }
     }
