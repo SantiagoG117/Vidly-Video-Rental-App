@@ -1,0 +1,80 @@
+﻿@using Vidly_Video_Rental_App.Models
+@model List<Vidly_Video_Rental_App.Models.Movie>
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Movies</h2>
+
+<p>
+	@Html.ActionLink("New Movie", "New", "Movie", new { @class="btn btn-primary" })
+</p>
+
+<table id="movies" class="table table-bordered table-hover">
+	<thead>
+	<tr>
+		<th>Movies</th>
+		<th>Genre</th>
+		<th>Delete</th>
+	</tr>
+	</thead>
+	<tbody>
+		@foreach (Movie movie in Model)
+		{
+			<tr>
+				<td>
+					@Html.ActionLink(
+						movie.Name, //Text to be displayed on the link
+						"Update", //Action where the 
+						"Movie",
+						new { Id = movie.Id },// Anonymous object sent to the Update action
+						null //Required to create the link
+						)
+				</td>
+				<td>
+					@movie.Genre.Name
+				</td>
+				<td>
+					<button data-movie-id="@movie.Id" class="btn btn-link js-delete">Delete</button>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
+
+
+@section scripts {
+	<script>
+
+		$(document).ready(function () {
+			//Implement DataTables plugin
+			var table = $("#movies").DataTable();
+
+			$("#movies") //Get the movies table
+				//Click handler gets assigned only to the #movies selector, and gets executed by click events with the js-delete as attribute
+				.on("click", ".js-delete", function () {
+
+					//Store a reference to the delete button when its clicked
+					var button = $(this);
+
+					bootbox.confirm("Do you wish to delete this movie?", function (result) {
+						if (result) {
+							//DELETE AJAX request
+							$.ajax({
+								url: "/api/movies/" + button.attr("data-movie-id"),// Create action to delete the movie
+								method: "DELETE",
+								success: function () {
+									table.row(button.parents("tr")) //Get the row you wish to delete
+										.remove() //Delete the movie from the internal list maintain by data table
+										.draw(); // Redraw the table after the movie is deleted
+								}
+							});
+						}
+					});
+				})
+
+		})
+
+	</script>
+}

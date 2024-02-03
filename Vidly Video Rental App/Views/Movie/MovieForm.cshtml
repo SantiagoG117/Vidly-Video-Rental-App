@@ -1,0 +1,49 @@
+﻿@model Vidly_Video_Rental_App.ViewModels.MovieViewModel
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+
+@using (Html.BeginForm("Save", "Movie"))
+{
+    <!--Movie Name-->
+    <div>
+        @Html.LabelFor(m => m.Movie.Name)
+        @Html.TextBoxFor(m => m.Movie.Name, new { @class = "form-control" })
+    </div>
+
+    <!--Genres-->
+    <div>
+        @Html.LabelFor(m => m.Genres)
+        @Html.DropDownListFor(m => m.Movie.GenreId,
+            new SelectList(Model.Genres, "Id", "Name"),
+            "Select Genre",
+            new { @class = "form-control" }
+            )
+    </div>
+
+    <!--Release Date-->
+    <div>
+        @Html.LabelFor(m => m.Movie.ReleaseDate)
+        @Html.TextBoxFor(m => m.Movie.ReleaseDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+    </div>
+
+    <!--Number in stock-->
+    <div>
+        @Html.LabelFor(m => m.Movie.NumberInStock)
+        @Html.TextBoxFor(m => m.Movie.NumberInStock, new { @class = "form-control" })
+    </div>
+
+    <!--
+    Hidden field (Necessary for updating data): We don't have a value for movie id in the form, so
+    we pass it as a hidden field
+    -->
+    @Html.HiddenFor(m => m.Movie.Id)
+
+    <!--Save Button-->
+    <p></p>
+    <button type="submit" class="btn btn-primary">Save</button>
+
+}

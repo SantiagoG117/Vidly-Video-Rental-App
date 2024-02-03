@@ -23,11 +23,15 @@ namespace Vidly_Video_Rental_App
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js"));
+                      "~/Scripts/bootstrap.js",
+                      "~/Scripts/bootbox.js",
+                      "~/scripts/datatables/jquery.datatables.js",
+                      "~/scripts/datatables/datatables.bootstrap4.js"));
 
             // Generic styles of the application
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap-lumen.css",
+                      "~/content/dataTables/css/dataTables.bootstrap4.css", //Makes data tables looks like bootstrap tables
                       "~/Content/site.css"));
         }
     }
