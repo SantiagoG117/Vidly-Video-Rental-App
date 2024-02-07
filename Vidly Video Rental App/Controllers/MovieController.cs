@@ -44,7 +44,7 @@ namespace Vidly_Video_Rental_App.Controllers
             var genres = _context.Genres.ToList();
             
             //Create the model:
-            var viewModel = new MovieViewModel
+            var viewModel = new MovieFormViewModel
             {
                 //Necessary for populating the dropdown list
                 Genres = genres
@@ -103,7 +103,7 @@ namespace Vidly_Video_Rental_App.Controllers
             var movie = _context.Movies.SingleOrDefault(m => m.Id == id);
 
             //Build the ViewModel
-            var viewModel = new MovieViewModel()
+            var viewModel = new MovieFormViewModel()
             {
                 Genres = _context.Genres.ToList(),
                 Movie = movie

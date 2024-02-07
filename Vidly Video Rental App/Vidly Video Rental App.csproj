@@ -198,12 +198,15 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\CustomersController.cs" />
     <Compile Include="Controllers\Api\MoviesController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MovieController.cs" />
+    <Compile Include="Dtos\CustomerDTO.cs" />
     <Compile Include="Dtos\GenreDTO.cs" />
+    <Compile Include="Dtos\MembershipTypeDTO.cs" />
     <Compile Include="Dtos\MovieDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -264,6 +267,10 @@
     <Compile Include="Migrations\202401300029237_PopulateGenreTable.designer.cs">
       <DependentUpon>202401300029237_PopulateGenreTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202402060057140_ChangeDataTypeOfCustomerId.cs" />
+    <Compile Include="Migrations\202402060057140_ChangeDataTypeOfCustomerId.designer.cs">
+      <DependentUpon>202402060057140_ChangeDataTypeOfCustomerId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -274,7 +281,8 @@
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\MovieViewModel.cs" />
+    <Compile Include="ViewModels\CustomerFormViewModel.cs" />
+    <Compile Include="ViewModels\MovieFormViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -526,10 +534,11 @@
     <Content Include="Views\Shared\_NavBar.cshtml" />
     <Content Include="Views\Movie\Index.cshtml" />
     <Content Include="Views\Movie\MovieForm.cshtml" />
+    <Content Include="Views\Customer\Index.cshtml" />
+    <Content Include="Views\Customer\CustomerForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Customer\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -600,6 +609,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202401300029237_PopulateGenreTable.resx">
       <DependentUpon>202401300029237_PopulateGenreTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202402060057140_ChangeDataTypeOfCustomerId.resx">
+      <DependentUpon>202402060057140_ChangeDataTypeOfCustomerId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

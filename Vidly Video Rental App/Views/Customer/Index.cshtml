@@ -1,0 +1,79 @@
+﻿@model IList<Vidly_Video_Rental_App.Models.Customer>
+@{
+	ViewBag.Title = "Customers";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+	@Html.ActionLink("New Customer", "New", "Customer", new { @class= "btn btn-primary" })
+</p>
+
+<table id="customers" class="table table-striped table-bordered">
+	<thead>
+	<tr>
+		<th>Customer</th>
+		<th>Membership Type</th>
+		<th>Delete</th>
+	</tr>
+	</thead>
+	<tbody>
+	@foreach (var customer in Model)
+	{
+		<tr>
+			<td>
+				@Html.ActionLink(
+					customer.Name,//Text to be displayed in the link
+					"Update",
+					"Customer",
+					new { Id = customer.Id },// Value sent to the Update action
+					null //Necessary to create the link
+					)
+			</td>
+			<td>
+				@customer.MembershipType.Name
+			</td>
+			<td>
+				<button data-customer-id = "@customer.Id" class="btn btn-link js-delete"> Delete </button>
+			</td>
+		</tr>
+	}
+	</tbody>
+</table>
+
+@section scripts {
+	<script>
+		//Function to be executed when the DOM is ready
+		$(document).ready(function () {
+			//Implement Datatables plugin
+			var table = $("#customers").DataTable();
+
+			//Implement Delete functionality
+			$("#customers") //Get the customers table
+				//Click handler is assigned only to the #customers selector and gets executed
+				//only by click events that had js-delete as attribute
+				.on("click", ".js-delete", function () {
+
+					//Store a reference to the delete button when its clicked
+					var button = $(this);
+
+					bootbox.confirm("Do you wish to delete this customer?", function (result) {
+						if (result) {
+							//Call a DELETE AJAX request
+							$.ajax({
+                                url: "/api/customers/" + button.attr("data-customer-id"),//Call the action to delete the mcustmer
+								method: "DELETE",
+                                success: function () { //Call-back function in case the request was successful
+                                    table.row(button.parents("tr")) //Get the row you wish to delete
+                                        .remove() //Delete the movie from the internal list maintain by data table
+                                        .draw(); // Redraw the table after the movie is deleted
+                                }
+							})
+						}
+					})
+
+				})
+		})
+	</script>
+}

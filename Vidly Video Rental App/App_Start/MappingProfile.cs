@@ -14,6 +14,8 @@ namespace Vidly_Video_Rental_App.App_Start
         {
             Mapper.CreateMap<Movie, MovieDTO>();
             Mapper.CreateMap<MovieDTO, Movie>();
+            Mapper.CreateMap<Customer, CustomerDTO>();
+            Mapper.CreateMap<CustomerDTO, Customer>();
         }
     }
 }

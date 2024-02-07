@@ -1,0 +1,54 @@
+﻿@model Vidly_Video_Rental_App.ViewModels.CustomerFormViewModel
+
+@{
+	ViewBag.Title = Model.Title;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@Model.Title</h2>
+
+
+@using (Html.BeginForm("Save", "Customer"))
+{
+	<!--Name-->
+	<div class="form-group mb-3">
+		@Html.LabelFor(m => m.Customer.Name)
+		@Html.TextBoxFor(m => m.Customer.Name, new { @class = "form-control" })
+	</div>
+
+	<!-- Membership Type-->
+	<div class="dropdown mb-3">
+		@Html.LabelFor(m => m.Customer.MembershipTypeId)
+		@Html.DropDownListFor(m => m.Customer.MembershipTypeId,
+			new SelectList(
+				Model.MembershipTypes,//List to be used in the Drop-down list
+				"Id", //Property under which the values are stored
+				"Name" //Property to display in the drop down list
+				),
+			"Select Membership type",
+			new { @class = "form-control" }
+			)
+	</div>
+
+	<!-- Birth Date-->
+	<div class="form-group mb-3">
+		@Html.LabelFor(m => m.Customer.BirthDate)
+		@Html.TextBoxFor(m => m.Customer.BirthDate, "{0:d MMM yyyy}", new { @class = "form-control" })
+	</div>
+
+	<!--Is Subscribed to Newsletter-->
+	<div class="form-group mb-3">
+		<label>
+			@Html.CheckBoxFor(m => m.Customer.IsSubscribedToNewsletter) Subscribed To News Letter?
+		</label>
+	</div>
+
+	<!--
+	Necessary for update a Customer: We don't have a field for customerId, so we pass it to the 
+	Save Action through a Hidden field.
+	-->
+	@Html.HiddenFor(m => m.Customer.Id)
+
+	<button type="submit" class="btn btn-primary">Save</button>
+
+}

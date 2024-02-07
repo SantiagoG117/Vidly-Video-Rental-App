@@ -6,7 +6,7 @@ using Vidly_Video_Rental_App.Models;
 
 namespace Vidly_Video_Rental_App.ViewModels
 {
-    public class MovieViewModel
+    public class MovieFormViewModel
     {
         
         public Movie Movie { get; set; }

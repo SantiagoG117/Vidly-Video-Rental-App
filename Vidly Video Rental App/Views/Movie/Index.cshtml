@@ -1,7 +1,7 @@
 ﻿@using Vidly_Video_Rental_App.Models
 @model List<Vidly_Video_Rental_App.Models.Movie>
 @{
-	ViewBag.Title = "Index";
+	ViewBag.Title = "Movies";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -28,7 +28,7 @@
 						movie.Name, //Text to be displayed on the link
 						"Update", //Action where the 
 						"Movie",
-						new { Id = movie.Id },// Anonymous object sent to the Update action
+						new { Id = movie.Id },// Value sent to the Update action
 						null //Required to create the link
 						)
 				</td>
@@ -52,7 +52,8 @@
 			var table = $("#movies").DataTable();
 
 			$("#movies") //Get the movies table
-				//Click handler gets assigned only to the #movies selector, and gets executed by click events with the js-delete as attribute
+				//Click handler is assigned only to the #customers selector and gets executed
+				//only by click events that had js-delete as attribute
 				.on("click", ".js-delete", function () {
 
 					//Store a reference to the delete button when its clicked
@@ -62,9 +63,9 @@
 						if (result) {
 							//DELETE AJAX request
 							$.ajax({
-								url: "/api/movies/" + button.attr("data-movie-id"),// Create action to delete the movie
+								url: "/api/movies/" + button.attr("data-movie-id"),// Call the action to delete the movie
 								method: "DELETE",
-								success: function () {
+								success: function () { //Call-back function in case the request was successful
 									table.row(button.parents("tr")) //Get the row you wish to delete
 										.remove() //Delete the movie from the internal list maintain by data table
 										.draw(); // Redraw the table after the movie is deleted
