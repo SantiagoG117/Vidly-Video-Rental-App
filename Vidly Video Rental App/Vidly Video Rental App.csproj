@@ -271,6 +271,14 @@
     <Compile Include="Migrations\202402060057140_ChangeDataTypeOfCustomerId.designer.cs">
       <DependentUpon>202402060057140_ChangeDataTypeOfCustomerId.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202402092004013_SetGenreAsNullable.cs" />
+    <Compile Include="Migrations\202402092004013_SetGenreAsNullable.designer.cs">
+      <DependentUpon>202402092004013_SetGenreAsNullable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202402092005496_SetGenreIdColumnNotNullable.cs" />
+    <Compile Include="Migrations\202402092005496_SetGenreIdColumnNotNullable.designer.cs">
+      <DependentUpon>202402092005496_SetGenreIdColumnNotNullable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Customer.cs" />
@@ -278,6 +286,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MembershipType.cs" />
+    <Compile Include="Models\Min18YearsIfAMember.cs" />
     <Compile Include="Models\Movie.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -612,6 +621,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202402060057140_ChangeDataTypeOfCustomerId.resx">
       <DependentUpon>202402060057140_ChangeDataTypeOfCustomerId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202402092004013_SetGenreAsNullable.resx">
+      <DependentUpon>202402092004013_SetGenreAsNullable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202402092005496_SetGenreIdColumnNotNullable.resx">
+      <DependentUpon>202402092005496_SetGenreIdColumnNotNullable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

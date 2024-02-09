@@ -18,6 +18,9 @@ namespace Vidly_Video_Rental_App.Models
         public bool IsSubscribedToNewsletter { get; set; }
 
         [DisplayName("Birth Date")]
+        [Min18YearsIfAMember]
+        // If the user selects a Membership type different than 'Pay as you go' it must provide the Birthdate and it 
+        // must be at least 18 years of age.
         public DateTime? BirthDate { get; set; }
 
         //Navigation properties

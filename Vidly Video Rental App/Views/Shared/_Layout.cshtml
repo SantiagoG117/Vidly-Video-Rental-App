@@ -20,6 +20,11 @@
 
 	@Scripts.Render("~/bundles/jquery")
 	@Scripts.Render("~/bundles/bootstrap")
+	
+	@*
+	Allows us to add Script sections in our views. What we include in these sections will be rendered in
+	the Layout
+	*@
 	@RenderSection("scripts", required: false)
 </body>
 </html>

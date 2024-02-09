@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.WebSockets;
 using Vidly_Video_Rental_App.Models;
 using Vidly_Video_Rental_App.ViewModels;
 
@@ -64,8 +65,22 @@ namespace Vidly_Video_Rental_App.Controllers
         /// <param name="movie"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Save(Movie movie)
         {
+            //Validation
+            if (!ModelState.IsValid)
+            {
+                //Recreate model sent by the form
+                var viewModel = new MovieFormViewModel(movie)
+                {
+                    Genres = _context.Genres.ToList()
+                };
+
+                //Send model back to the form
+                return View("MovieForm", viewModel);
+            }
+
             //If the movie does not exist, save it
             if (movie.Id == 0)
             {
@@ -102,11 +117,15 @@ namespace Vidly_Video_Rental_App.Controllers
             //Get the movie from the database
             var movie = _context.Movies.SingleOrDefault(m => m.Id == id);
 
+            if (movie == null)
+                return HttpNotFound();
+            
+
             //Build the ViewModel
-            var viewModel = new MovieFormViewModel()
+            var viewModel = new MovieFormViewModel(movie)
             {
                 Genres = _context.Genres.ToList(),
-                Movie = movie
+                
             };
 
             //Send the ViewModel to the form

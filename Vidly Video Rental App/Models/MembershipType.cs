@@ -17,6 +17,10 @@ namespace Vidly_Video_Rental_App.Models
         public byte DurationInMonths { get; set; }
         public byte DiscountRate { get; set; }
 
+        //Read only properties: Prevent us from change them in the code. Similar to constants
+        public static readonly byte Unknown = 0;
+        public static readonly byte PayAsYouGo = 1;
+
 
     }
 }

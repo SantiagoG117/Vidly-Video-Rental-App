@@ -22,11 +22,13 @@ namespace Vidly_Video_Rental_App.Models
         public DateTime ReleaseDate { get; set; }
 
         [DisplayName("Number in Stock")]
+        [Range(1, 20)]
         public byte NumberInStock { get; set; }
 
         //Navigation properties
-        [Required]
+        
         public Genre Genre { get; set; } //One-toMany relationship with Movie
+        [Required]
         public byte GenreId { get; set; } //Foreign Key
 
     }

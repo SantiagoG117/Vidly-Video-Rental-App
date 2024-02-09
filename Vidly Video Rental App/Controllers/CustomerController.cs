@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using System.Web.Http;
+using System.Web.Optimization;
 using Vidly_Video_Rental_App.Models;
 using Vidly_Video_Rental_App.ViewModels;
 
@@ -43,6 +45,13 @@ namespace Vidly_Video_Rental_App.Controllers
             //Build the view model:
             var model = new CustomerFormViewModel()
             {
+                /*
+                 *Important for validation:
+                 * Properties of the customer object will be initialized to their default values, so the
+                 * customer Id will be initialize to 0.
+                 * This provides a value to the customer id when the hidden field is rendered
+                 */
+                Customer = new Customer(), 
                 MembershipTypes = _context.MembershipTypes.ToList()
             };
 
@@ -50,13 +59,26 @@ namespace Vidly_Video_Rental_App.Controllers
             return View("CustomerForm", model);
         }
 
-        
+        [ValidateAntiForgeryToken]
+        [System.Web.Http.HttpPost]
         public ActionResult Save(Customer customer)
         {
-            if (customer.Id == 0)
+            
+            //If model state is not valid return to the customer form with the values sent
+            if (!ModelState.IsValid)
             {
-                _context.Customers.Add(customer);
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = _context.MembershipTypes.ToList()
+                };
+
+                return View("CustomerForm", viewModel);
             }
+
+
+            if (customer.Id == 0)
+                _context.Customers.Add(customer);
             else
             {
                 //Get the customer we wish to update from the Data base:
@@ -76,6 +98,7 @@ namespace Vidly_Video_Rental_App.Controllers
             return RedirectToAction("Index", "Customer");
         }
 
+        [System.Web.Http.HttpPost]
         public ActionResult Update(int id)
         {
             //Create the ViewModel
