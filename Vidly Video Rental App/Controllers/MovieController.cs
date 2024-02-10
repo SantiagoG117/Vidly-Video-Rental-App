@@ -35,10 +35,15 @@ namespace Vidly_Video_Rental_App.Controllers
                     .Include(m => m.Genre) //Eager load the genres
                     .ToList();
 
-            //Send the model to the view
-            return View(model);
+            //According to the current user, send the model to a specific view
+            if (User.IsInRole(RoleName.CanManageMovies))
+                return View("List", model);
+            
+            return View("ReadOnlyList", model);
+            
         }
 
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult New()
         {
             //Get the Genres:
@@ -110,8 +115,8 @@ namespace Vidly_Video_Rental_App.Controllers
             //Redirect the view to the Index
             return RedirectToAction("Index", "Movie");
         }
-        
 
+        [Authorize(Roles = RoleName.CanManageMovies)]
         public ActionResult Update(int id)
         {
             //Get the movie from the database

@@ -58,6 +58,7 @@ namespace Vidly_Video_Rental_App.Controllers.Api
         /// Responds to DELETE api/movies/id
         /// </summary>
         /// <param name="id"></param>
+        [Authorize(Roles = RoleName.CanManageMovies)]
         [HttpDelete]
         public void DeleteMovie(int id)
         {
