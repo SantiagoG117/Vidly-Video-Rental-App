@@ -12,7 +12,7 @@ using Vidly_Video_Rental_App.Models;
 namespace Vidly_Video_Rental_App.Controllers.Api
 {
     /// <summary>
-    /// We designed our API to be as stable and decoupled as possible. Instead of receiving or returning domain model
+    /// This API was designed to be as stable and decoupled as possible. Instead of receiving or returning domain model
     /// objects, this API works with DTO objects.
     ///
     /// DTO reduce the chances of breaking the API as we refactor our domain models and prevents our API from working
@@ -40,17 +40,31 @@ namespace Vidly_Video_Rental_App.Controllers.Api
         }
 
         /// <summary>
-        /// Responds to GET /api/movies
+        /// Responds to /api/movies
         /// </summary>
+        /// <param name="query">Optional parameter. Typeahead plugin will send the '%QUERY' parameter here</param>
         /// <returns>List of MovieDTO objects</returns>
         [HttpGet]
-        public IEnumerable<MovieDTO> GetMovies()
+        public IHttpActionResult GetMovies(string query = null)
         {
-            return
-                _context.Movies
-                    .Include(m => m.Genre)//Eager load the Genre
-                    .ToList() //Get a list of the movies in the Database
-                    .Select(Mapper.Map<Movie, MovieDTO>); //Map each Movie to MovieDTO
+           //Get the collection of Movies with its genres
+           var moviesQuery = _context.Movies
+               .Include(m => m.Genre) //Eager load the Genres
+               .Where(m => m.NumberAvailable > 0); //Return the movies with available copies for rental
+
+           //If there is a query, apply the filter to the collection of movies to be displayed in the typeahead list:
+           if (!String.IsNullOrWhiteSpace(query))
+               //C# equivalent of: SELECT* FROM moviesQuery WHERE query = Name
+               moviesQuery = moviesQuery.Where(m => m.Name.Contains(query));
+           
+
+           //Execute the query through toList():
+           var moviesDtos= moviesQuery
+                .ToList() //Get a list of the movies in the Database
+                .Select(Mapper.Map<Movie, MovieDTO>); //Map each Movie to MovieDTO
+
+           //Return the result of the query
+           return Ok(moviesDtos);
         }
 
 
@@ -118,7 +132,7 @@ namespace Vidly_Video_Rental_App.Controllers.Api
 
 
             // Returns the Unified Resource Identifier (URI) of the newly created resource to the client:
-            // /api/customers/customerID
+            // /api/movies/movieID
             return Created(new Uri(Request.RequestUri + //URI of the current client request
                                    "/" + movie.Id) //ID of the newly create movie 
                 , movieDTO); //Return the DTO object

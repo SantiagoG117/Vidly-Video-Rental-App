@@ -20,6 +20,8 @@ namespace Vidly_Video_Rental_App.Dtos
         public DateTime? BirthDate { get; set; }
 
         public bool IsSubscribedToNewsletter { get; set; }
+
+        public IList<MovieDTO> Movies { get; set; } //One-to-Many relationship
     }
 
     

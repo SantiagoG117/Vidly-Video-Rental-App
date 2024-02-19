@@ -9,7 +9,9 @@
 			<ul class="navbar-nav flex-grow-1">
 				<li>@Html.ActionLink("Customers", "Index", "Customer", new { area = "" }, new { @class = "nav-link" })</li>
 				<li>@Html.ActionLink("Movies", "Index", "Movie", new { area = "" }, new { @class = "nav-link" })</li>
-			</ul>
+				<li>@Html.ActionLink("New Rental", "New", "Rental", new { area = "" }, new { @class = "nav-link" })</li>
+			
+				</ul>
 			@Html.Partial("_LoginPartial")
 		</div>
 	</div>

@@ -28,15 +28,29 @@ namespace Vidly_Video_Rental_App.Controllers.Api
         /// <summary>
         /// Responds to GET /api/customers
         /// </summary>
-        /// <returns></returns>
+        /// <param name="query">Optional parameter. Typeahead plug in will send the '%QUERY' parameter here</param>
+        /// <returns>List of CustomeDTO</returns>
         [HttpGet]
-        public IEnumerable<CustomerDTO> GetCustomers()
+        public IHttpActionResult GetCustomers(string query = null)
         {
-            return 
-                _context.Customers //Get the customers from the Database
-                .Include(c => c.MembershipType)//Eager load the Membership types
+
+            //Get the data we need:
+            var customersQuery = _context.Customers //Get the customers from the Database
+                .Include(c => c.MembershipType);//Eager load the Membership types
+
+            //If there is a query, apply the filter to the collection of customers to be displayed in the typeahead list:
+            if (!String.IsNullOrWhiteSpace(query))
+                //This code is the C# equivalent of: SELECT* FROM customersQuery WHERE query = Name)
+                customersQuery = customersQuery.Where(c => c.Name.Contains(query));
+            
+
+            //Execute the query through ToList():    
+            var customerDtos = customersQuery    
                 .ToList()//Convert the outcome to a List
                 .Select(Mapper.Map<Customer, CustomerDTO>);//Map Customer objects to CustomerDTO objects
+
+            //Return  the result of the query
+            return Ok(customerDtos);
         }
 
         /// <summary>

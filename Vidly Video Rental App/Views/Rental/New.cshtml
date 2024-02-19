@@ -1,0 +1,119 @@
+﻿@model dynamic
+
+@{
+	ViewBag.Title = "New Rental Form";
+}
+
+<h2>New Rental Form</h2>
+
+<form id="newRental">
+	<div class="form-group mb-3">
+		<label>Customer</label>
+		<div class="tt-container">
+			<input id="customer" type="text" value="" class="form-control" />
+		</div>
+	</div>
+
+	<div class="form-group mb-3">
+		<label>Movie</label>
+		<div class="tt-container">
+			<input id="movie" type="text" value="" class="form-control" />
+		</div>
+	</div>
+	
+	<div class="row">
+		<!--
+		Bootstrap divides the screen into 12 columns. md means medium size display system and 4 means this
+		particular column should take a third of the screen size
+		-->
+		<div class="col-md-4">
+			<!--Placeholder for a the list of movies selected by the user-->
+			<ul id="movies" class="list-group mb-3"></ul>
+		</div>
+	</div>
+
+	<button class="btn btn-primary">Submit</button>
+</form>
+@section scripts{
+	<script>
+		$(document).ready(function () {
+
+			//View model on the client side with customer ID and movies to be sent to the server
+			let vm = {
+				
+				movieIds: []
+			};
+
+			@*Suggestion event for customers*@
+			var customers = new Bloodhound({
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('Name'),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				remote: {
+					url: '/api/customers?query=%QUERY',
+					wildcard: '%QUERY'
+				}
+			});
+
+			$('#customer').typeahead({
+				minLength: 2,
+				highlight: true
+				}, {
+				name: 'customers',
+				display: 'Name',
+				source: customers
+			}).on("typeahead:select", function (e, customer) {
+				vm.customerId = customer.Id;
+			});
+
+
+			@*Suggestion event for Movies*@
+			var movies = new Bloodhound({
+				datumTokenizer: Bloodhound.tokenizers.obj.whitespace('Name'),
+				queryTokenizer: Bloodhound.tokenizers.whitespace,
+				remote: {
+					url: '/api/movies?query=%QUERY',
+					wildcard: '%QUERY'
+				}
+			});
+
+			$('#movie').typeahead({
+				minLength: 2,
+				highlight: true
+			}, {
+				name: 'movies',
+				display: 'Name',
+				source: movies
+			}).on("typeahead:select", function (e, movie) {
+				@*Populate the list of movies with each movie selected by the user*@
+				$("#movies").append("<li class='list-group-item'>" + movie.Name + "</li>");
+
+				@*Clear the text box after each selection*@
+				$("#movie").typeahead("val", "");
+
+				@*Add selected movie to the array list in the view model*@
+				vm.movieIds.push(movie.Id);
+			});
+
+			$("#newRental").submit(function (e) { //Use JQuery to get the form element and handle its submit event
+				e.preventDefault(); //Prevents the form from being sumbitted as a traditional HTML form
+
+				console.log(vm.movieIds)
+
+				//Ajax request to be triggered when the form gets submitted
+				$.ajax({
+					url: "/api/rentals",
+					method: "post",
+					data: vm
+				})
+				.done(function () {
+					toastr.success("Rentals successfully recorded")
+				})
+				.fail(function () {
+					toastr.error("Something unexpected happened")
+				});
+			});
+
+		});
+
+	</script>
+}

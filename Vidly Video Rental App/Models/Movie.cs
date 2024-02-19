@@ -25,6 +25,8 @@ namespace Vidly_Video_Rental_App.Models
         [Range(1, 20)]
         public byte NumberInStock { get; set; }
 
+        public byte NumberAvailable { get; set; }
+
         //Navigation properties
         
         public Genre Genre { get; set; } //One-toMany relationship with Movie

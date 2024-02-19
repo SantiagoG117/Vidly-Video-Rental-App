@@ -62,13 +62,13 @@
 						if (result) {
 							//Call a DELETE AJAX request
 							$.ajax({
-                                url: "/api/customers/" + button.attr("data-customer-id"),//Call the action to delete the mcustmer
+								url: "/api/customers/" + button.attr("data-customer-id"),//Call the action to delete the mcustmer
 								method: "DELETE",
-                                success: function () { //Call-back function in case the request was successful
-                                    table.row(button.parents("tr")) //Get the row you wish to delete
-                                        .remove() //Delete the movie from the internal list maintain by data table
-                                        .draw(); // Redraw the table after the movie is deleted
-                                }
+								success: function () { //Call-back function in case the request was successful
+									table.row(button.parents("tr")) //Get the row you wish to delete
+										.remove() //Delete the movie from the internal list maintain by data table
+										.draw(); // Redraw the table after the movie is deleted
+								}
 							})
 						}
 					})

@@ -24,9 +24,11 @@ namespace Vidly_Video_Rental_App.Models
         public DateTime? BirthDate { get; set; }
 
         //Navigation properties
-        public MembershipType MembershipType { get; set; } //One-to-Many relationship with MembershipType
+        public MembershipType MembershipType { get; set; } //One-to-One relationship with MembershipType
 
         [DisplayName("Membership Type")]
         public byte MembershipTypeId { get; set; } //Foreign Key
+
+        
     }
 }
