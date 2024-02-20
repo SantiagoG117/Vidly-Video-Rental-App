@@ -10,17 +10,17 @@
 	<div class="form-group mb-3">
 		<label>Customer</label>
 		<div class="tt-container">
-			<input id="customer" type="text" value="" class="form-control" />
+			<input id="customer" name="customer" data-rule-validCustomer="true" required type="text" value="" class="form-control" />
 		</div>
 	</div>
 
-	<div class="form-group mb-3">
+	<div class="form-group mb-3"> 
 		<label>Movie</label>
 		<div class="tt-container">
-			<input id="movie" type="text" value="" class="form-control" />
+			<input id="movie" name="movie" data-rule-validMovie="true" type="text" value="" class="form-control" />
 		</div>
 	</div>
-	
+
 	<div class="row">
 		<!--
 		Bootstrap divides the screen into 12 columns. md means medium size display system and 4 means this
@@ -35,12 +35,13 @@
 	<button class="btn btn-primary">Submit</button>
 </form>
 @section scripts{
+	@Scripts.Render("~/bundles/jqueryval")
 	<script>
 		$(document).ready(function () {
 
-			//View model on the client side with customer ID and movies to be sent to the server
+			//View model on the client side with customer ID and list of Movies id to be sent to the web API
 			let vm = {
-				
+
 				movieIds: []
 			};
 
@@ -61,7 +62,9 @@
 				name: 'customers',
 				display: 'Name',
 				source: customers
-			}).on("typeahead:select", function (e, customer) {
+			})
+				@*Handle the selection event of type ahead*@
+				.on("typeahead:select", function (e, customer) {
 				vm.customerId = customer.Id;
 			});
 
@@ -83,7 +86,9 @@
 				name: 'movies',
 				display: 'Name',
 				source: movies
-			}).on("typeahead:select", function (e, movie) {
+			})
+				@* Handle the selection event of type ahead*@
+				.on("typeahead:select", function (e, movie) {
 				@*Populate the list of movies with each movie selected by the user*@
 				$("#movies").append("<li class='list-group-item'>" + movie.Name + "</li>");
 
@@ -94,25 +99,53 @@
 				vm.movieIds.push(movie.Id);
 			});
 
-			$("#newRental").submit(function (e) { //Use JQuery to get the form element and handle its submit event
-				e.preventDefault(); //Prevents the form from being sumbitted as a traditional HTML form
 
-				console.log(vm.movieIds)
+			//Custom validator for customers using the validation plugin of JQuery:
+			$.validator.addMethod("validCustomer", function () {
+				//Make sure that the view model has a customerId property and that the customerId has a numeric value
+				//different from 0
+				return vm.customerId && vm.customerId !== 0;
+			}, "Please select a valid customer.");
 
-				//Ajax request to be triggered when the form gets submitted
-				$.ajax({
-					url: "/api/rentals",
-					method: "post",
-					data: vm
-				})
-				.done(function () {
-					toastr.success("Rentals successfully recorded")
-				})
-				.fail(function () {
-					toastr.error("Something unexpected happened")
-				});
+			//Custom validator for movies using the validation plugin of JQuery:
+			$.validator.addMethod("validMovie", function () {
+				// Make sure that the user selects at least one movie
+				return vm.movieIds.length > 0;
+			}, "Please select at least one movie.");
+
+			//Validation plug-in:
+			var validator = $("#newRental").validate({
+				//If the form is valid, this function will be called to submit the form to the server
+				submitHandler: function () {
+					//Ajax post-request to be triggered when the form gets submitted
+					$.ajax({
+						url: "/api/rentals",
+						method: "post",
+						data: vm
+					})
+					.done(function () {
+						toastr.success("Rentals successfully recorded");
+
+						//Clear the form:
+                        $("#customer").typeahead("val", "");
+                        $("#movie").typeahead("val", "");
+
+						//Clear the list of movies:
+                        $("#movies").empty();
+
+						//Reset the view model
+                        vm = { movieIds: [] };
+
+						//Reset the validation state of the form
+                        validator.resetForm();
+					})
+					.fail(function () {
+						toastr.error("Something unexpected happened");
+					});
+
+					return false;//Prevents the form from being sumbitted as a traditional HTML form
+				}
 			});
-
 		});
 
 	</script>
